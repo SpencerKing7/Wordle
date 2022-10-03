@@ -32,14 +32,6 @@ def wordle():
 
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
-    
-# MILESTONE 1
-    # c = 0
-    # for i in word:
-    #     gw.set_square_letter(0, c, i)
-    #     c+= 1
-    #     print(i,c)
-
 
 # Startup code
 
