@@ -11,17 +11,28 @@ from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
 
 def wordle():
-    word = random.choice(FIVE_LETTER_WORDS)
+
+    wordleWord = random.choice(FIVE_LETTER_WORDS)
+
+    # MILESTONE 2
     def enter_action(s):
-        gw.show_message("You have to implement this method.")
+    
+        row = 0
+        guess = ""
+        for col in range(5):
+            guess += gw.get_square_letter(row, col)
+            col += 1
+            # print(guess)
+
+        if guess.lower() in FIVE_LETTER_WORDS:
+            print("Hurray! Guess " + guess + " was found in word list")
+        else:
+            gw.show_message("Not in word list.")
+            
 
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
-    c = 0
-    for i in word:
-        gw.set_square_letter(0, c, i)
-        c+= 1
-        print(i,c)
+
 # Startup code
 
 if __name__ == "__main__":
