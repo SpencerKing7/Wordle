@@ -13,25 +13,31 @@ from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
 def wordle():
 
     wordleWord = random.choice(FIVE_LETTER_WORDS)
+    guessNum = 0
 
     # MILESTONE 2
-    def enter_action(s):
+    def enter_action(guessNum):
     
-        row = 0
         guess = ""
         for col in range(5):
-            guess += gw.get_square_letter(row, col)
+            guess += gw.get_square_letter(guessNum, col)
             col += 1
             # print(guess)
 
         if guess.lower() in FIVE_LETTER_WORDS:
             print("Hurray! Guess " + guess + " was found in word list")
+            for col in range(5):
+                if gw.get_square_letter(guessNum, col).lower() == wordleWord[col]:
+                    gw.set_square_color(guessNum, col, '#66BB66')
+                elif gw.get_square_letter(guessNum, col).lower() in wordleWord:
+                    gw.set_square_color(guessNum, col, '#CCBB66')
+                else:
+                    gw.set_square_color(guessNum, col, '#999999')                
+
         else:
             gw.show_message("Not in word list.")
-            
-
     gw = WordleGWindow()
-    gw.add_enter_listener(enter_action)
+    gw.add_enter_listener(enter_action(guessNum))
 
 # Startup code
 
