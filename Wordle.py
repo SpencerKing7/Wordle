@@ -3,57 +3,55 @@
 """
 WORDLE 
 Abbie Luper, Spencer King, Logan Kimball, Samantha Prettyman, Zachary Barton
-
 """
 
 import random
-
 from WordleDictionary import FIVE_LETTER_WORDS
-from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
+from WordleGraphics import WordleGWindow, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
 
 def wordle():
-
     wordleWord = random.choice(FIVE_LETTER_WORDS)
+    gw = WordleGWindow()
 
     print(wordleWord)
 
-    def enter_action(s):
+    def enter_action(guess):
 
-        row = 0
-        col = 0
-        guess = ""
+        # CHANGE COLOR OF BOXES
+        def update_squares():
+            i = 0
 
-        # ITERATE THROUGH EACH COLUMN OF GIVEN ROW
-        for col in range(5):
-            guess += gw.get_square_letter(gw.get_current_row(), col)
-            col += 1
+            for letter in wordleWord:
+                if letter == guess[i].lower():
+                    gw.set_square_color(gw.get_current_row(), i, CORRECT_COLOR)
 
-        # SEE IF THE WORD IS LEGITIMATE
-        if guess.lower() in FIVE_LETTER_WORDS:
-            print("Hurray! Guess " + guess + " was found in word list")
-
-            # CHANGE COLOR OF BOXES IF WORD IS LEGITIMATE
-            for col in range(5):
-                if gw.get_square_letter(gw.get_current_row(), col).lower() == wordleWord[col]:
-                    gw.set_square_color(gw.get_current_row(), col, '#66BB66')
-                elif gw.get_square_letter(gw.get_current_row(), col).lower() in wordleWord:
-                    gw.set_square_color(gw.get_current_row(), col, '#CCBB66')
+                    if gw.get_key_color(guess[i]) != CORRECT_COLOR:
+                        gw.set_key_color(guess[i], CORRECT_COLOR)
+                elif guess[i].lower() in wordleWord:
+                    gw.set_square_color(gw.get_current_row(), i, PRESENT_COLOR)
+                    gw.set_key_color(guess[i], PRESENT_COLOR)
                 else:
-                    gw.set_square_color(gw.get_current_row(), col, '#999999')  
+                    gw.set_square_color(gw.get_current_row(), i, MISSING_COLOR)
+                    gw.set_key_color(guess[i], MISSING_COLOR)
+                
+                i += 1
+        
+        # SEE IF THE WORD IS LEGITIMATE
+        if guess.lower() not in FIVE_LETTER_WORDS:
+            gw.show_message("Not in word list", "red")
+            return
 
-            # MESSAGE FOR WHEN THEY GET THE CORRECT WORD
-            if guess.lower() == wordleWord.lower():
-                gw.show_message("Congrats! You guessed the word!")
+        # MESSAGE FOR WHEN THEY GET THE CORRECT WORD
+        if guess.lower() == wordleWord:
+            gw.show_message("Congrats! You guessed the word!", "green")
+            update_squares()
+            return
 
-            gw.set_current_row(gw.get_current_row()+1)
-
-        else:
-            gw.show_message("Not in word list.")
-
-    gw = WordleGWindow()
+        update_squares()
+        gw.set_current_row(gw.get_current_row() + 1)
+    
+    gw.set_current_row(0)
     gw.add_enter_listener(enter_action)
-
-# Startup code
 
 if __name__ == "__main__":
     wordle()
