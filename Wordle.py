@@ -24,7 +24,9 @@ def wordle():
             for letter in wordleWord:
                 if letter == guess[i].lower():
                     gw.set_square_color(gw.get_current_row(), i, CORRECT_COLOR)
-                    gw.set_key_color(guess[i], CORRECT_COLOR)
+
+                    if gw.get_key_color(guess[i]) != CORRECT_COLOR:
+                        gw.set_key_color(guess[i], CORRECT_COLOR)
                 elif guess[i].lower() in wordleWord:
                     gw.set_square_color(gw.get_current_row(), i, PRESENT_COLOR)
                     gw.set_key_color(guess[i], PRESENT_COLOR)
